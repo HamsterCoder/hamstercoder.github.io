@@ -1,0 +1,11 @@
+.filter {
+  margin-bottom: 10px;
+}
+
+.sort {
+  cursor: pointer;
+}
+
+.user__attribute-name {
+  margin-right: 10px;  
+}
