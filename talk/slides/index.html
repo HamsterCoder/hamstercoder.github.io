@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reactive Programming</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="shower/themes/ribbon/styles/screen-16x10.css">
+</head>
+<body class="shower list">
+<header class="caption">
+    <h1>Observable and Computed</h1>
+    <p>homyasusina@</p>
+</header>
+
+<section class="slide title-slide">
+    <h2>
+        <span class="rabbit-highlight">Observable</span> и <span class="rabbit-highlight">Computed</span> на примере KnockoutJS<br>
+    </h2>
+    <style>
+        .rabbit-highlight {
+            color: #59A03E;
+        }
+
+        .title-slide {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .title-slide blockquote {
+            font-size: 70px;
+
+            margin-top: -60px;
+        }
+
+        .title-slide blockquote:before {
+            display: none;
+        }
+
+        .title-slide blockquote > small {
+            text-align: right;
+            font-size: 50px;
+        }
+
+        .title-slide h2 {
+            font-size: 90px;
+
+            margin-top: -60px;
+        }
+    </style>
+</section>
+
+<section class="slide">
+    <h2>Ну что, начнём?!</h2>
+    <pre>
+        <code>$(function () {</code>
+        <code>    // ...</code>
+        <code>});</code>
+    </pre>
+</section>
+
+<section class="slide">
+    <h2>А теперь пора?</h2>
+    <pre>
+        <code>if (document.readyState === 'complete') {</code>
+        <code>    ready();</code>
+        <code>} else {</code>
+        <code>    window.addEventListener('load', ready);</code>
+        <code>}</code>
+    </pre>
+</section>
+
+<section class="slide">
+    <ol>
+        <li>Реактивное программирование</li>
+        <li>Observable и Сomputed</li>
+        <li>Заглянем под капот</li>
+        <li>Другие реализации</li>
+    </ol>
+    <img id="reactive-rabbit" src="pictures/reactive-rabbit.jpg" alt="Reactive Rabbit">
+    <style>
+        #reactive-rabbit {
+            position: relative;
+            left: 324px;
+            top: -100px;
+
+            width: 500px;
+        }
+    </style>
+</section>
+
+<section class="slide section-1 title-slide" id="">
+    <h2>Реактивное программирование</h2>
+    <style>
+        .section-1,
+        .section-1 pre,
+        .section-1 h2,
+        .section-1 blockquote {
+            color: #fff;
+        }
+
+        .section-1 {
+            background-color: #2F3244;
+        }
+    </style>
+</section>
+
+<section class="slide section-1">
+    <img id="erik-meijer-image" src="pictures/erik-meijer.jpg" alt="Erik Meijer">
+    <style>
+        #erik-meijer-image {
+            width: 1024px;
+            margin-left: -100px;
+            margin-top: -106px;
+        }
+    </style>
+</section>
+
+<section class="slide section-1 title-slide">
+    <blockquote>
+        &ldquo;I have no ... idea&rdquo;
+        <p><small>Erik Meijer</small></p>
+    </blockquote>
+</section>
+
+<section class="slide section-1">
+    <pre>
+        <code>b = 1;</code>
+        <code>c = 2;</code>
+        <code>a = b + c;</code>
+        <code>console.log(a); <mark>// 3</mark></code>
+        <span class="next">
+            <code>b = 'Hello, ';</code>
+            <code>c = 'World';</code>
+            <code>console.log(a); <mark>// Hello, World</mark></code>
+        </span>
+    </pre>
+</section>
+
+<section class="slide section-1 title-slide">
+    <img style="width: 768px; margin-top: -100px;" src="pictures/excel-example.png" alt="Excel is reactive">
+</section>
+
+<section class="slide section-1 title-slide">
+    <img style="width: 1024px;  margin-top: -100px;" src="pictures/jam.jpg" alt="Jam example">
+</section>
+
+<section class="slide section-1">
+    <h2>Резюмируя</h2>
+    <ul>
+        <li>Деклативно описывать поведение</li>
+        <li>Автоматически обновлять зависимости</li>
+    </ul>
+</section>
+
+<section class="slide section-2 title-slide">
+    <h2>Observable и сomputed</h2>
+    <style>
+        .section-2 .diagram,
+        .section-3 .diagram {
+            width: 1024px;
+            margin-top: -100px;
+        }
+    </style>
+</section>
+
+<section class="slide section-2">
+    <section>
+        <h2>Observable</h2>
+        <ul>
+            <li>Поддерживает чтение и запись</li>
+            <li>Можно подписаться</li>
+        </ul>
+    </section>
+</section>
+
+<section class="slide section-2">
+    <pre>
+        <code><mark>// Create</mark></code>
+        <code>var myObservable = ko.observable();</code>
+
+        <span class="next">
+            <code><mark>// Write value</mark></code>
+            <code>myObservable(42); </code>
+        </span>
+        <span class="next">
+            <code><mark>// Read value</mark></code>
+            <code>myObservable(); </code>
+        </span>
+    </pre>
+</section>
+
+<section class="slide section-2">
+    <h2>Подписка на изменения</h2>
+    <pre>
+        <code>var myObservable = ko.observable();</code>
+        <code class="next">myObservable.subscribe(value => console.log(value));</code>
+        <code class="next">myObservable(42); <mark>// 42</mark></code>
+        <code class="next">myObservable('Hello, MoscowJS'); <mark>// Hello, MoscowJS</mark></code>
+    </pre>
+</section>
+
+<section class="slide section-2">
+    <section>
+        <h2>Computed</h2>
+        <ul>
+            <li>Вычисляется из зависимостей</li>
+            <li>Поддерживает чтение</li>
+            <li>Можно подписаться</li>
+        </ul>
+    </section>
+</section>
+
+<section class="slide section-2">
+    <pre>
+        <code><mark>// Create</mark></code>
+        <code>var myComputed = ko.computed(() => myObservable() + 1);</code>
+
+        <span class="next">
+            <code><mark>// Read value</mark></code>
+            <code>myComputed(); </code>
+        </span>
+
+        <span class="next">
+            <code><mark>// Subscribe to change</mark></code>
+            <code>myComputed.subscribe(value => console.log(value)); </code>
+        </span>
+    </pre>
+</section>
+
+<section class="slide section-2">
+    <pre>
+        <code>b = ko.observable(1);</code>
+        <code>c = ko.observable(2);</code>
+        <code>a = ko.computed(() => <mark>b()</mark> + <mark>c()</mark>);</code>
+        <code>console.log(a()); <mark>// 3</mark></code>
+        <code class="next">a.subscribe(value => console.log(value));</code>
+        <code class="next">b('Hello, '); <mark>//Hello,2</mark></code>
+        <code class="next">c('World'); <mark>// Hello, World</mark></code>
+    </pre>
+</section>
+
+<!--------------------------------->
+
+<section class="slide section-2">
+    <h2>Задача</h2>
+    <ul>
+        <li>Выводить список операций</li>
+        <li>Обновлять его по таймеру</li>
+    </ul>
+    <img style="width: 768px;" src="pictures/operations-1.png" alt="">
+</section>
+
+<!--<section class="slide section-2">
+    <pre>
+        <code>&lt;table&gt;</code>
+        <code>&lt;thead&gt;&lt;tr&gt;</code>
+        <code>    &lt;th&gt;Id&lt;/th&gt;</code>
+        <code>    &lt;th&gt;Progress&lt;/th&gt;</code>
+        <code>&lt;/tr&gt;&lt;/thead&gt;</code>
+        <code>&lt;tbody&gt;&lt;tr&gt;</code>
+        <code>    &lt;td&gt;abcd-abcd-abcd&lt;/td&gt;</code>
+        <code>    &lt;td&gt;0.69&lt;/td&gt;</code>
+        <code>&lt;/tr&gt;&lt;/tbody&gt;</code>
+        <code>&lt;/table&gt;</code>
+    </pre>
+</section>-->
+
+<section class="slide section-2">
+    <h2>Хранение данных</h2>
+    <pre>
+        <code>view.operations = ko.collection({</code>
+        <code class="next">    <mark>key</mark>: data => data.id,</code>
+        <code class="next">    <mark>insert</mark>: data => new Operation(data),</code>
+        <code class="next">    <mark>update</mark>: (item, data) => item.data(data)</code>
+        <code class="next">});</code>
+    </pre>
+</section>
+
+<section class="slide section-2">
+    <h2>Операция</h2>
+    <pre>
+        <code>function Operation(data) {</code>
+        <code>    var view = this;</code>
+        <code>    view.id = data.id;</code>
+        <code>    view.data = ko.observable(data);</code>
+        <code>    view.progress = ko.computed(() => {</code>
+        <code>        return view.data() && view.data().progress);</code>
+        <code>    };</code>
+        <code>}</code>
+    </pre>
+</section>
+
+<!--<section class="slide section-2">
+    <pre>
+        <code>&lt;table&gt;</code>
+        <code>&lt;!&#45;&#45;...&#45;&#45;&gt;</code>
+        <code>&lt;tbody <mark>data-bind="foreach: operations"</mark>&gt;&lt;tr&gt;</code>
+        <code>    &lt;td <mark>data-bind="text: id"</mark>&gt;&lt;/td&gt;</code>
+        <code>    &lt;td <mark>data-bind="text: progress"</mark>&gt;&lt;/td&gt;</code>
+        <code>&lt;/tr&gt;&lt;/tbody&gt;</code>
+        <code>&lt;/table&gt;</code>
+    </pre>
+</section>-->
+
+<section  class="slide section-2">
+    <h2>Получение данных</h2>
+    <pre>
+        <code>get('/operations')</code>
+        <code>    .then(operations => view.operations(operations));</code>
+    </pre>
+</section>
+
+<!--------------------------------->
+
+<section class="slide section-2">
+    <h2>Ещё</h2>
+    <ul>
+        <li>Добавить сортировку</li>
+    </ul>
+    <img style="width: 768px;" src="pictures/operations-2.png" alt="">
+</section>
+
+<!--<section class="slide section-2">
+    <pre>
+        <code>&lt;table&gt;</code>
+        <code>&lt;thead&gt;&lt;tr&gt;</code>
+        <code>    &lt;th&gt;Id <mark>&lt;i class="sort"&gt;&lt;/i&gt;</mark>&lt;/th&gt;</code>
+        <code>    &lt;th&gt;Progress <mark>&lt;i class="sort"&gt;&lt;/i&gt;</mark>&lt;/th&gt;</code>
+        <code>&lt;/tr&gt;&lt;/thead&gt;</code>
+        <code>&lt;!&#45;&#45;...&#45;&#45;&gt;</code>
+        <code>&lt;/table&gt;</code>
+    </pre>
+</section>-->
+
+<section class="slide section-2">
+    <h2>Хранение данных</h2>
+    <pre>
+        <code>view.sort = ko.observable('id');</code>
+        <span class="next">
+            <code>view.columns = {</code>
+            <code>    id: item => item.id,</code>
+            <code>    progress: item => item.progress()</code>
+            <code>}</code>
+        </span>
+        <span class="next">
+            <code>view.sortedOperations = ko.computed(() => {</code>
+            <code>    return sort(<mark>view.operation()</mark>, <mark>view.sort()</mark>)</code>
+            <code>});</code>
+        </span>
+    </pre>
+</section>
+
+<!--<section class="slide section-2">
+    <pre>
+        <code>&lt;table&gt;</code>
+        <code>&lt;thead&gt;&lt;tr&gt;</code>
+        <code>    &lt;th&gt;Id &lt;i class="sort"
+            <mark>data-bind="sort: 'id'"</mark>&gt;&lt;/i&gt;&lt;/th&gt;</code>
+        <code>    &lt;th&gt;Progress &lt;i class="sort"
+            <mark>data-bind="sort: 'progress'"</mark>&gt;&lt;/i&gt;&lt;/th&gt;</code>
+        <code>&lt;/tr&gt;&lt;/thead&gt;</code>
+        <code>&lt;!&#45;&#45;...&#45;&#45;&gt;</code>
+        <code>&lt;/table&gt;</code>
+    </pre>
+</section>-->
+
+<!--------------------------------->
+
+<section class="slide section-2">
+    <h2>Ещё</h2>
+    <ul>
+        <li>Добавить фильтр по id</li>
+    </ul>
+    <img style="width: 768px;" src="pictures/operations-3.png" alt="">
+</section>
+
+<!--<section class="slide section-2">
+    <pre>
+        <code>&lt;input type="text"&gt;</code>
+    </pre>
+</section>-->
+
+<section class="slide section-2">
+    <h2>Хранение данных</h2>
+    <pre>
+        <code>view.filter = ko.observable('');</code>
+        <code>view.filteredOperations = ko.computed(() => {</code>
+        <code>  return filter(<mark>view.sortedOperation()</mark>, <mark>view.filter()</mark>);</code>
+        <code>});</code>
+    </pre>
+</section>
+
+<!--<section class="slide section-2">
+    <pre>
+        <code>&lt;input type="text"
+            <mark>data-bind="value: filter, valueUpdate: 'input'"</mark>&gt;</code>
+    </pre>
+</section>-->
+
+<section class="slide section-2 title-slide">
+    <img style="margin-top: -200px;" class="diagram" src="pictures/dependency-graph.svg" alt="">
+</section>
+
+<section class="slide section-3 title-slide">
+    <img class="diagram" src="pictures/teacher-rabbit.jpg" alt="Under the hood">
+</section>
+
+
+<!--------------------------------->
+
+<section class="slide section-3 title-slide">
+    <h2>Заглянем под капот</h2>
+</section>
+
+<section class="slide section-3">
+    <h2>Пример</h2>
+    <pre>
+        <code>var a = ko.observable();</code>
+        <code>var b = ko.computed(() => <mark>a()</mark> + 1;);</code>
+    </pre>
+</section>
+
+<!--
+<section class="slide section-3">
+    <img class="diagram" src="./pictures/fig-subscribing.jpg" alt="Subscribing">
+</section>
+
+<section class="slide section-3">
+    <img class="diagram" src="./pictures/fig-notifying.jpg" alt="Subscribing">
+</section>
+
+<section class="slide section-3">
+    <img class="diagram" src="./pictures/fig-registering.jpg" alt="Subscribing">
+</section>
+
+<section class="slide section-3">
+    <img class="diagram" src="./pictures/fig-computed-context.jpg" alt="Subscribing">
+</section>
+-->
+
+<section class="slide section-3">
+    <h2>Подписка</h2>
+    <pre>
+        <code>var a = ko.observable();</code>
+        <code>a.subscribe(value => console.log(value));
+    <span class="next step-in">a._subscribers.push(callback);</span>
+        </code>
+    </pre>
+</section>
+
+<section class="slide section-3">
+    <style>
+        .step-in:before {
+            padding-right: 10px;
+            content: '---->';
+            color: #979a9e;
+
+            margin-left: -60px;
+        }
+    </style>
+    <h2>Оповещение</h2>
+    <pre>
+        <code>a(42);
+    <span class="next step-in">a._notifySubscribers();
+        <span class="next step-in">a._subscribers[0].callback(); // 42</span>
+    </span>
+        </code>
+    </pre>
+</section>
+
+<section class="slide section-3">
+    <h2>Вычислительный контекст</h2>
+    <ul>
+        <li>Стек из контекстов</li>
+        <li>Регистрация в контексте</li>
+    </ul>
+</section>
+
+<section class="slide section-3">
+    <h2>Чтение и регистрация</h2>
+    <pre>
+        <code>a();
+    <span class="next step-in">ko._context.register(a);</span>
+        </code>
+    </pre>
+</section>
+
+<section class="slide section-3">
+    <h2>Создание контекста</h2>
+    <pre>
+        <code>var b = ko.computed(() => a() + 1;);
+    <span class="next step-in">ko._context.create(b);</span>
+    <span class="next step-in">b._evaluate();
+        <span class="next step-in">ko._context.register(a);</span>
+    </span><span class="next step-in">a.subscribe(() => b._evaluate(););</span>
+    <span class="next step-in">ko._context.remove();</span>
+        </code>
+    </pre>
+</section>
+
+<section class="slide section-3">
+    <h2>Создание computed</h2>
+    <ol>
+        <li class="">Вызываем конструктор Computed</li>
+        <li class="next">Computed создаёт контекст</li>
+        <li class="next">Knockout вычисляет Computed</li>
+        <li class="next">Computed подписывается на зависимости</li>
+        <li class="next">Computed удаляет вычислительный контекст</li>
+    </ol>
+</section>
+
+<!--------------------------------->
+
+<section class="slide section-4 title-slide">
+    <style>
+        .section-4 .framework-logo {
+            -webkit-flex-grow: 0;
+            flex-grow: 0;
+            -webkit-flex-shrink: 0;
+            flex-shrink: 0;
+
+            align-self: flex-start;
+
+
+            width: 200px;
+            margin-right: 100px;
+        }
+
+        .section-4 .flex-container {
+            display: -webkit-flex;
+            display: flex;
+        }
+    </style>
+    <h2>Другие реализации</h2>
+</section>
+
+<section class="slide section-4">
+    <h2>Reactive Extentions</h2>
+    <div class="flex-container">
+        <img class="framework-logo" src="pictures/logo-reactive-x.png" alt="Reactive Extentions">
+        <ul>
+            <li>Пример <a href="http://bit.ly/rx-example">bit.ly/rx-example</a></li>
+            <li>Доклад <a href="http://bit.ly/rx-talk">bit.ly/rx-talk</a></li>
+        </ul>
+    </div>
+
+</section>
+
+<section class="slide section-4">
+    <h2>Elm</h2>
+    <div class="flex-container">
+        <img class="framework-logo" src="pictures/logo-elm.png" alt="Elm">
+        <ul>
+            <li>Пример <a href="http://bit.ly/elm-example">bit.ly/elm-example</a></li>
+            <li>Доклад <a href="http://bit.ly/elm-talk">bit.ly/elm-talk</a></li>
+        </ul>
+    </div>
+</section>
+
+<section class="slide section-4">
+    <div class="flex-container">
+        <img class="framework-logo" src="pictures/homyasusina.jpg" alt="homyasusina">
+        <div>
+            <p>Спасибо за внимание. Вопросы?</p>
+            <ul>
+                <li>Twitter <a href="https://twitter.com/homyasusina">@homyasusina</a></li>
+                <li>Пример <a href="http://bit.ly/ko-example">bit.ly/ko-example</a></li>
+                <li>Слайды <a href=""></a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!--
+    To hide progress bar from entire presentation
+    just remove “progress” element.
+-->
+<div class="progress"></div>
+<script src="shower/shower.min.js"></script>
+<!-- Copyright © 2015 Yours Truly, Famous Inc. -->
+<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>
