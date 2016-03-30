@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-debug.js"></script>
+    <link rel="stylesheet" href="knockout-example.css">
+    <meta name="description" content="Knockout.js">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Example Knockout.js</title>
+</head>
+<body>
+<div class="main">
+    <div class="container">
+        <h1>Operations</h1>
+        <div class="filter-container row">
+            <div class="col-md-6">
+                <input type="text" class="filter form-control" data-bind="value: filter, valueUpdate: 'input'">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped">
+                    <thead><tr>
+                        <th>Id <i class="fa fa-sort" data-bind="css: {'fa-sort-asc': sort() === 'id'}, click: function () { sort('id'); }"></i></th>
+                        <th>Progress <i class="fa fa-sort" data-bind="css: {'fa-sort-asc': sort() === 'progress'}, click: function () { sort('progress'); }"></i></th>
+                    </tr></thead>
+                    <tbody data-bind="foreach: filteredOperations"><tr>
+                        <td data-bind="text: id"></td>
+                        <td data-bind="text: progress"></td>
+                    </tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="knockout-example.js"></script>
+</div>
+</body>
+</html>
