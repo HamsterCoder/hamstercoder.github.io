@@ -1,0 +1,27 @@
+{
+  "name": "mysite",
+  "version": "0.0.1",
+  "private": true,
+  "keywords": [
+  ],
+  "devDependencies": {
+    "babel-core": "",
+    "babel-preset-es2015": "",
+    "gulp": "",
+    "gulp-concat": "",
+    "gulp-babel": "",
+    "gulp-rename": "",
+    "gulp-sourcemaps": "",
+    "gulp-util": "",
+    "gulp-watch": "",
+    "source-map": ""
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": ">= 1.1.0"
+  },
+  "scripts": {
+    "build": "./node_modules/gulp/bin/gulp.js build",
+    "watch": "./node_modules/gulp/bin/gulp.js watch"
+  }
+}
