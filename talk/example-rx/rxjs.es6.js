@@ -7,7 +7,7 @@ var users = [
   },
   {
     name: 'Pinkie Pie',
-    rps: 0,
+    rps: 0
   },
   {
     name: 'Midnight Sparkle',
