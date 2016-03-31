@@ -15,7 +15,8 @@
 
 <section class="slide title-slide">
     <h2>
-        <span class="rabbit-highlight">Observable</span> и <span class="rabbit-highlight">Computed</span> на примере KnockoutJS<br>
+        <span class="rabbit-highlight">Observable</span> и <span class="rabbit-highlight">Computed</span> <br>
+        на пример KnockoutJS
     </h2>
     <style>
         .rabbit-highlight {
@@ -48,12 +49,55 @@
             font-size: 50px;
         }
 
+        .slide .title-slide-heading,
         .title-slide h2 {
             font-size: 90px;
 
             margin-top: -60px;
         }
+
+        .slide .title-slide-heading {
+            margin-top: 0;
+        }
+
+        .slide pre code {
+            font-size: 30px;
+            line-height: 1.6;
+        }
+
+        .slide li,
+        .slide a,
+        .slide p {
+            font-size: 30px;
+        }
+
+        .slide .flex-container {
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        /* SECTION 4*/
+        .slide .framework-logo {
+            -webkit-flex-grow: 0;
+            flex-grow: 0;
+            -webkit-flex-shrink: 0;
+            flex-shrink: 0;
+
+            align-self: flex-start;
+            -webkit-align-self: flex-start;
+
+
+            width: 200px;
+            margin-right: 100px;
+        }
     </style>
+</section>
+
+<section class="slide">
+    <div class="flex-container">
+        <img class="framework-logo" src="pictures/moscowJS.svg" style="width: 420px;" alt="Moscow JS">
+        <h2 class="title-slide-heading">Hello,<br> MoscowJS 29</h2>
+    </div>
 </section>
 
 <section class="slide">
@@ -86,9 +130,8 @@
     <img id="reactive-rabbit" src="pictures/reactive-rabbit.jpg" alt="Reactive Rabbit">
     <style>
         #reactive-rabbit {
-            position: relative;
-            left: 324px;
-            top: -100px;
+            margin-left: 324px;
+            margin-top: -150px;
 
             width: 500px;
         }
@@ -111,15 +154,15 @@
     </style>
 </section>
 
-<section class="slide section-1">
-    <img id="erik-meijer-image" src="pictures/erik-meijer.jpg" alt="Erik Meijer">
-    <style>
-        #erik-meijer-image {
-            width: 1024px;
-            margin-left: -100px;
-            margin-top: -106px;
-        }
-    </style>
+<section class="slide section-1 title-slide">
+    <img style="width: 1048px;  margin-top: -100px;" src="pictures/erik-meijer.jpg" alt="Erik Meijer">
+    <a style="
+        color: #fff;
+        position: absolute;
+        z-index: 10;
+        bottom: 40px;
+        right: 80px;
+    " href="http://bit.ly/what-is-reactive" class="href">bit.ly/what-is-reactive</a>
 </section>
 
 <section class="slide section-1 title-slide">
@@ -129,16 +172,16 @@
     </blockquote>
 </section>
 
-<section class="slide section-1">
+<section class="slide">
     <pre>
-        <code>b = 1;</code>
-        <code>c = 2;</code>
-        <code>a = b + c;</code>
-        <code>console.log(a); <mark>// 3</mark></code>
+        <code>var a = 1;</code>
+        <code>var b = 2;</code>
+        <code>var sum = a + b;</code>
+        <code>console.log(sum); <mark>// 3</mark></code>
         <span class="next">
-            <code>b = 'Hello, ';</code>
-            <code>c = 'World';</code>
-            <code>console.log(a); <mark>// Hello, World</mark></code>
+            <code>a = 'Hello, ';</code>
+            <code>b = 'World';</code>
+            <code>console.log(sum); <mark>// Hello, World</mark></code>
         </span>
     </pre>
 </section>
@@ -160,7 +203,7 @@
 </section>
 
 <section class="slide section-2 title-slide">
-    <h2>Observable и сomputed</h2>
+    <h2>Observable и Computed</h2>
     <style>
         .section-2 .diagram,
         .section-3 .diagram {
@@ -200,9 +243,9 @@
     <h2>Подписка на изменения</h2>
     <pre>
         <code>var myObservable = ko.observable();</code>
-        <code class="next">myObservable.subscribe(value => console.log(value));</code>
+        <code class="next">myObservable
+    .subscribe(value => console.log(value));</code>
         <code class="next">myObservable(42); <mark>// 42</mark></code>
-        <code class="next">myObservable('Hello, MoscowJS'); <mark>// Hello, MoscowJS</mark></code>
     </pre>
 </section>
 
@@ -211,7 +254,7 @@
         <h2>Computed</h2>
         <ul>
             <li>Вычисляется из зависимостей</li>
-            <li>Поддерживает чтение</li>
+            <li>Поддерживает только чтение</li>
             <li>Можно подписаться</li>
         </ul>
     </section>
@@ -220,7 +263,9 @@
 <section class="slide section-2">
     <pre>
         <code><mark>// Create</mark></code>
-        <code>var myComputed = ko.computed(() => myObservable() + 1);</code>
+        <code>var myComputed = ko.computed(</code>
+        <code>    () => myObservable() + 1</code>
+        <code>);</code>
 
         <span class="next">
             <code><mark>// Read value</mark></code>
@@ -229,21 +274,27 @@
 
         <span class="next">
             <code><mark>// Subscribe to change</mark></code>
-            <code>myComputed.subscribe(value => console.log(value)); </code>
+            <code>myComputed.subscribe(onChange); </code>
         </span>
     </pre>
 </section>
 
 <section class="slide section-2">
     <pre>
-        <code>b = ko.observable(1);</code>
-        <code>c = ko.observable(2);</code>
-        <code>a = ko.computed(() => <mark>b()</mark> + <mark>c()</mark>);</code>
-        <code>console.log(a()); <mark>// 3</mark></code>
-        <code class="next">a.subscribe(value => console.log(value));</code>
-        <code class="next">b('Hello, '); <mark>//Hello,2</mark></code>
-        <code class="next">c('World'); <mark>// Hello, World</mark></code>
+        <code>var a = ko.observable(1);</code>
+        <code>var b = ko.observable(2);</code>
+        <code>var sum = ko.computed(() => <mark>a()</mark> + <mark>b()</mark>);</code>
+        <span class="next">
+            <code>console.log(sum()); <mark>// 3</mark></code>
+            <code>sum.subscribe(value => console.log(value));</code>
+        </span>
+        <code class="next">a('Hello, '); <mark>// Hello, 2</mark></code>
+        <code class="next">b('World'); <mark>// Hello, World</mark></code>
     </pre>
+</section>
+
+<section class="slide section-3 title-slide">
+    <img class="diagram" src="pictures/teacher-rabbit.jpg" alt="Under the hood">
 </section>
 
 <!--------------------------------->
@@ -254,23 +305,11 @@
         <li>Выводить список операций</li>
         <li>Обновлять его по таймеру</li>
     </ul>
-    <img style="width: 768px;" src="pictures/operations-1.png" alt="">
 </section>
 
-<!--<section class="slide section-2">
-    <pre>
-        <code>&lt;table&gt;</code>
-        <code>&lt;thead&gt;&lt;tr&gt;</code>
-        <code>    &lt;th&gt;Id&lt;/th&gt;</code>
-        <code>    &lt;th&gt;Progress&lt;/th&gt;</code>
-        <code>&lt;/tr&gt;&lt;/thead&gt;</code>
-        <code>&lt;tbody&gt;&lt;tr&gt;</code>
-        <code>    &lt;td&gt;abcd-abcd-abcd&lt;/td&gt;</code>
-        <code>    &lt;td&gt;0.69&lt;/td&gt;</code>
-        <code>&lt;/tr&gt;&lt;/tbody&gt;</code>
-        <code>&lt;/table&gt;</code>
-    </pre>
-</section>-->
+<section class="slide section-2">
+    <img style="width: 768px;" src="pictures/operations-1.png" alt="">
+</section>
 
 <section class="slide section-2">
     <h2>Хранение данных</h2>
@@ -291,29 +330,17 @@
         <code>    view.id = data.id;</code>
         <code>    view.data = ko.observable(data);</code>
         <code>    view.progress = ko.computed(() => {</code>
-        <code>        return view.data() && view.data().progress);</code>
+        <code>        return view.data().progress;</code>
         <code>    };</code>
         <code>}</code>
     </pre>
 </section>
 
-<!--<section class="slide section-2">
-    <pre>
-        <code>&lt;table&gt;</code>
-        <code>&lt;!&#45;&#45;...&#45;&#45;&gt;</code>
-        <code>&lt;tbody <mark>data-bind="foreach: operations"</mark>&gt;&lt;tr&gt;</code>
-        <code>    &lt;td <mark>data-bind="text: id"</mark>&gt;&lt;/td&gt;</code>
-        <code>    &lt;td <mark>data-bind="text: progress"</mark>&gt;&lt;/td&gt;</code>
-        <code>&lt;/tr&gt;&lt;/tbody&gt;</code>
-        <code>&lt;/table&gt;</code>
-    </pre>
-</section>-->
-
 <section  class="slide section-2">
     <h2>Получение данных</h2>
     <pre>
         <code>get('/operations')</code>
-        <code>    .then(operations => view.operations(operations));</code>
+        <code>    .then(data => view.operations(data));</code>
     </pre>
 </section>
 
@@ -324,20 +351,11 @@
     <ul>
         <li>Добавить сортировку</li>
     </ul>
-    <img style="width: 768px;" src="pictures/operations-2.png" alt="">
 </section>
 
-<!--<section class="slide section-2">
-    <pre>
-        <code>&lt;table&gt;</code>
-        <code>&lt;thead&gt;&lt;tr&gt;</code>
-        <code>    &lt;th&gt;Id <mark>&lt;i class="sort"&gt;&lt;/i&gt;</mark>&lt;/th&gt;</code>
-        <code>    &lt;th&gt;Progress <mark>&lt;i class="sort"&gt;&lt;/i&gt;</mark>&lt;/th&gt;</code>
-        <code>&lt;/tr&gt;&lt;/thead&gt;</code>
-        <code>&lt;!&#45;&#45;...&#45;&#45;&gt;</code>
-        <code>&lt;/table&gt;</code>
-    </pre>
-</section>-->
+<section class="slide section-2">
+    <img style="width: 768px;" src="pictures/operations-2.png" alt="">
+</section>
 
 <section class="slide section-2">
     <h2>Хранение данных</h2>
@@ -357,20 +375,6 @@
     </pre>
 </section>
 
-<!--<section class="slide section-2">
-    <pre>
-        <code>&lt;table&gt;</code>
-        <code>&lt;thead&gt;&lt;tr&gt;</code>
-        <code>    &lt;th&gt;Id &lt;i class="sort"
-            <mark>data-bind="sort: 'id'"</mark>&gt;&lt;/i&gt;&lt;/th&gt;</code>
-        <code>    &lt;th&gt;Progress &lt;i class="sort"
-            <mark>data-bind="sort: 'progress'"</mark>&gt;&lt;/i&gt;&lt;/th&gt;</code>
-        <code>&lt;/tr&gt;&lt;/thead&gt;</code>
-        <code>&lt;!&#45;&#45;...&#45;&#45;&gt;</code>
-        <code>&lt;/table&gt;</code>
-    </pre>
-</section>-->
-
 <!--------------------------------->
 
 <section class="slide section-2">
@@ -378,40 +382,32 @@
     <ul>
         <li>Добавить фильтр по id</li>
     </ul>
-    <img style="width: 768px;" src="pictures/operations-3.png" alt="">
 </section>
 
-<!--<section class="slide section-2">
-    <pre>
-        <code>&lt;input type="text"&gt;</code>
-    </pre>
-</section>-->
+<section class="slide section-2">
+    <img style="width: 768px;" src="pictures/operations-3.png" alt="">
+</section>
 
 <section class="slide section-2">
     <h2>Хранение данных</h2>
     <pre>
         <code>view.filter = ko.observable('');</code>
         <code>view.filteredOperations = ko.computed(() => {</code>
-        <code>  return filter(<mark>view.sortedOperation()</mark>, <mark>view.filter()</mark>);</code>
+        <code>    return filter(</code>
+        <code>        <mark>view.sortedOperation()</mark>,</code>
+        <code>        <mark>view.filter()</mark></code>
+        <code>    );</code>
         <code>});</code>
     </pre>
 </section>
-
-<!--<section class="slide section-2">
-    <pre>
-        <code>&lt;input type="text"
-            <mark>data-bind="value: filter, valueUpdate: 'input'"</mark>&gt;</code>
-    </pre>
-</section>-->
 
 <section class="slide section-2 title-slide">
     <img style="margin-top: -200px;" class="diagram" src="pictures/dependency-graph.svg" alt="">
 </section>
 
-<section class="slide section-3 title-slide">
-    <img class="diagram" src="pictures/teacher-rabbit.jpg" alt="Under the hood">
+<section class="slide section-1 title-slide">
+    <img style="width: 1024px;  margin-top: -100px;" src="pictures/jam.jpg" alt="Jam example">
 </section>
-
 
 <!--------------------------------->
 
@@ -423,34 +419,16 @@
     <h2>Пример</h2>
     <pre>
         <code>var a = ko.observable();</code>
-        <code>var b = ko.computed(() => <mark>a()</mark> + 1;);</code>
+        <code>var b = ko.computed(() => <mark>a()</mark> + 1);</code>
     </pre>
 </section>
-
-<!--
-<section class="slide section-3">
-    <img class="diagram" src="./pictures/fig-subscribing.jpg" alt="Subscribing">
-</section>
-
-<section class="slide section-3">
-    <img class="diagram" src="./pictures/fig-notifying.jpg" alt="Subscribing">
-</section>
-
-<section class="slide section-3">
-    <img class="diagram" src="./pictures/fig-registering.jpg" alt="Subscribing">
-</section>
-
-<section class="slide section-3">
-    <img class="diagram" src="./pictures/fig-computed-context.jpg" alt="Subscribing">
-</section>
--->
 
 <section class="slide section-3">
     <h2>Подписка</h2>
     <pre>
         <code>var a = ko.observable();</code>
         <code>a.subscribe(value => console.log(value));
-    <span class="next step-in">a._subscribers.push(callback);</span>
+    <span class="next step-in">a._subscribers.push({ callback: callback });</span>
         </code>
     </pre>
 </section>
@@ -519,25 +497,6 @@
 <!--------------------------------->
 
 <section class="slide section-4 title-slide">
-    <style>
-        .section-4 .framework-logo {
-            -webkit-flex-grow: 0;
-            flex-grow: 0;
-            -webkit-flex-shrink: 0;
-            flex-shrink: 0;
-
-            align-self: flex-start;
-
-
-            width: 200px;
-            margin-right: 100px;
-        }
-
-        .section-4 .flex-container {
-            display: -webkit-flex;
-            display: flex;
-        }
-    </style>
     <h2>Другие реализации</h2>
 </section>
 
@@ -570,9 +529,10 @@
         <div>
             <p>Спасибо за внимание. Вопросы?</p>
             <ul>
+                <li>Оля Кобец, Яндекс</li>
                 <li>Twitter <a href="https://twitter.com/homyasusina">@homyasusina</a></li>
                 <li>Пример <a href="http://bit.ly/ko-example">bit.ly/ko-example</a></li>
-                <li>Слайды <a href=""></a></li>
+                <li>Слайды <a href="http://bit.ly/homyasusina-talk">bit.ly/homyasusina-talk</a></li>
             </ul>
         </div>
     </div>
